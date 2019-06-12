@@ -17,6 +17,7 @@ package raft
 import (
 	"bytes"
 	"fmt"
+	"log"
 
 	pb "github.com/shimingyah/raft/raftpb"
 )
@@ -139,4 +140,25 @@ func limitSize(ents []pb.Entry, maxSize uint64) []pb.Entry {
 		}
 	}
 	return ents[:limit]
+}
+
+// Check logs fatal if err != nil.
+func Check(err error) {
+	if err != nil {
+		log.Fatalf("%+v", err)
+	}
+}
+
+// AssertTrue asserts that b is true. Otherwise, it would log fatal.
+func AssertTrue(b bool) {
+	if !b {
+		log.Fatalf("%+v", fmt.Errorf("Assert failed"))
+	}
+}
+
+// AssertTruef is AssertTrue with extra info.
+func AssertTruef(b bool, format string, args ...interface{}) {
+	if !b {
+		log.Fatalf("%+v", fmt.Errorf(format, args...))
+	}
 }
