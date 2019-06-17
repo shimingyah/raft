@@ -93,3 +93,29 @@ message ConfChange {
 	optional uint64          NodeID  = 3 [(gogoproto.nullable) = false];
 	optional bytes           Context = 4;
 }
+
+// Worker services.
+message Payload {
+	optional bytes Data = 1;
+}
+
+// Raft context
+message Context {
+	optional fixed64 id = 1;
+	optional uint32 group = 2;
+	optional string addr = 3;
+	optional uint64 snapshot_ts = 4;
+}
+
+// Raft batch msg
+message Batch {
+	optional Context context = 1;
+	optional Payload payload = 2;
+}
+
+service Raft {
+	rpc Ping(Payload) returns (Payload) {}
+	rpc Send(Batch) returns (Payload) {}
+	rpc Join(Context) returns (Payload) {}
+	rpc Peers(Context) returns (Payload) {}
+}
