@@ -26,6 +26,11 @@ import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
 
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
+
 import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -343,6 +348,178 @@ func init() {
 	proto.RegisterEnum("raftpb.MessageType", MessageType_name, MessageType_value)
 	proto.RegisterEnum("raftpb.ConfChangeType", ConfChangeType_name, ConfChangeType_value)
 }
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// Client API for Raft service
+
+type RaftClient interface {
+	Ping(ctx context.Context, in *Payload, opts ...grpc.CallOption) (*Payload, error)
+	Send(ctx context.Context, in *Batch, opts ...grpc.CallOption) (*Payload, error)
+	Join(ctx context.Context, in *Context, opts ...grpc.CallOption) (*Payload, error)
+	Peers(ctx context.Context, in *Context, opts ...grpc.CallOption) (*Payload, error)
+}
+
+type raftClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewRaftClient(cc *grpc.ClientConn) RaftClient {
+	return &raftClient{cc}
+}
+
+func (c *raftClient) Ping(ctx context.Context, in *Payload, opts ...grpc.CallOption) (*Payload, error) {
+	out := new(Payload)
+	err := grpc.Invoke(ctx, "/raftpb.Raft/Ping", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *raftClient) Send(ctx context.Context, in *Batch, opts ...grpc.CallOption) (*Payload, error) {
+	out := new(Payload)
+	err := grpc.Invoke(ctx, "/raftpb.Raft/Send", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *raftClient) Join(ctx context.Context, in *Context, opts ...grpc.CallOption) (*Payload, error) {
+	out := new(Payload)
+	err := grpc.Invoke(ctx, "/raftpb.Raft/Join", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *raftClient) Peers(ctx context.Context, in *Context, opts ...grpc.CallOption) (*Payload, error) {
+	out := new(Payload)
+	err := grpc.Invoke(ctx, "/raftpb.Raft/Peers", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for Raft service
+
+type RaftServer interface {
+	Ping(context.Context, *Payload) (*Payload, error)
+	Send(context.Context, *Batch) (*Payload, error)
+	Join(context.Context, *Context) (*Payload, error)
+	Peers(context.Context, *Context) (*Payload, error)
+}
+
+func RegisterRaftServer(s *grpc.Server, srv RaftServer) {
+	s.RegisterService(&_Raft_serviceDesc, srv)
+}
+
+func _Raft_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Payload)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RaftServer).Ping(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/raftpb.Raft/Ping",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RaftServer).Ping(ctx, req.(*Payload))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Raft_Send_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Batch)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RaftServer).Send(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/raftpb.Raft/Send",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RaftServer).Send(ctx, req.(*Batch))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Raft_Join_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Context)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RaftServer).Join(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/raftpb.Raft/Join",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RaftServer).Join(ctx, req.(*Context))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Raft_Peers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Context)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RaftServer).Peers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/raftpb.Raft/Peers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RaftServer).Peers(ctx, req.(*Context))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Raft_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "raftpb.Raft",
+	HandlerType: (*RaftServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Ping",
+			Handler:    _Raft_Ping_Handler,
+		},
+		{
+			MethodName: "Send",
+			Handler:    _Raft_Send_Handler,
+		},
+		{
+			MethodName: "Join",
+			Handler:    _Raft_Join_Handler,
+		},
+		{
+			MethodName: "Peers",
+			Handler:    _Raft_Peers_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "raft.proto",
+}
+
 func (m *Entry) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
