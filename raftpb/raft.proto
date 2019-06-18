@@ -102,16 +102,16 @@ message Payload {
 
 // Raft context
 message Context {
-	optional fixed64 id = 1;
-	optional uint32 group = 2;
-	optional string addr = 3;
-	optional uint64 snapshot_ts = 4;
+	optional fixed64 id = 1 [(gogoproto.nullable) = false];
+	optional uint32 group = 2 [(gogoproto.nullable) = false];
+	optional string addr = 3 [(gogoproto.nullable) = false];
+	optional uint64 snapshot_ts = 4 [(gogoproto.nullable) = false];
 }
 
 // Raft batch msg
 message Batch {
-	optional Context context = 1;
-	optional Payload payload = 2;
+	optional Context context = 1 [(gogoproto.nullable) = false];
+	optional Payload payload = 2 [(gogoproto.nullable) = false];
 }
 
 service Raft {
