@@ -43,6 +43,8 @@ type Logger interface {
 
 func SetLogger(l Logger) { raftLogger = l }
 
+func GetLogger() Logger { return raftLogger }
+
 var (
 	defaultLogger = &DefaultLogger{Logger: log.New(os.Stderr, "raft", log.LstdFlags)}
 	discardLogger = &DefaultLogger{Logger: log.New(ioutil.Discard, "", 0)}

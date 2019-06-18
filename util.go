@@ -149,6 +149,11 @@ func Check(err error) {
 	}
 }
 
+// Check2 acts as convenience wrapper around Check, using the 2nd argument as error.
+func Check2(_ interface{}, err error) {
+	Check(err)
+}
+
 // AssertTrue asserts that b is true. Otherwise, it would log fatal.
 func AssertTrue(b bool) {
 	if !b {
